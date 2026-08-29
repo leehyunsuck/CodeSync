@@ -10,3 +10,4 @@
 ## 참여자
 - **C++**: [Tae Seong Hong](https://github.com/tshong3)
 - **Java**: [Hyun-suck Lee](https://github.com/leehyunsuck)
+1
