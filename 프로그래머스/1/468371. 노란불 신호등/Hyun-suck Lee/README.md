@@ -1,10 +1,10 @@
 # [level 1] 노란불 신호등 - 468371 
 
-[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/468371?language=java) 
+[문제 링크](https://school.programmers.co.kr/learn/courses/30/lessons/468371) 
 
 ### 성능 요약
 
-메모리: 98.9 MB, 시간: 30.44 ms
+메모리: 87.6 MB, 시간: 15.39 ms
 
 ### 구분
 
@@ -16,7 +16,7 @@
 
 ### 제출 일자
 
-2026년 08월 29일 14:33:10
+2026년 08월 30일 01:17:07
 
 ### 문제 설명
 
