@@ -1,61 +1,50 @@
+// 태성씨 풀이 보고 min, sec 로 분할한거 sec 만 사용하는걸로 변경
 class Solution {
     class Time {
-        private int min;
         private int sec;
         
         Time(String time) {
             String[] split = time.split(":");
-            min = Integer.parseInt(split[0]);
-            sec = Integer.parseInt(split[1]);
+            sec = Integer.parseInt(split[0]) * 60 + Integer.parseInt(split[1]);
         }
         
         public void prev() {
             sec -= 10;
             if (sec < 0) {
-                min--;
-                sec += 60;
-            }
-            
-            // 시간 최소값 00:00
-            if (min < 0) {
-                min = 0;
                 sec = 0;
             }
         }
         
-        // 시간으로 넘어가는 반례 있으면 여기 확인필요 (mm:ss 형식이라 일단 깊게 안씀)
         public void next() {
             sec += 10;
-            if (sec >= 60) {
-                min++;
-                sec -= 60;
-            }
         }
         
         // 특정 구간에 속하는지
         public boolean isInSection(Time start, Time end) {
-            int now = this.toSecond();
+            int now = this.getSec();
             
-            return start.toSecond() <= now && now <= end.toSecond();
+            return start.getSec() <= now && now <= end.getSec();
         }
         
         // 특정 시간 넘었는지
         public boolean isOver(Time time) {
-            return this.toSecond() > time.toSecond();
+            return this.getSec() > time.getSec();
         }
         
         public void changTime(Time time) {
-            this.min = time.min;
-            this.sec = time.sec;
+            this.sec = time.getSec();
         }
         
-        public int toSecond() {
-            return min * 60 + sec;
+        public int getSec() {
+            return this.sec;
         }
         
         public String toString() {
-            String min = this.min < 10 ? "0" + this.min : this.min + "",
-                   sec = this.sec < 10 ? "0" + this.sec : this.sec + "";
+            int iMin = this.sec / 60,
+                iSec = this.sec % 60;
+            
+            String min = iMin < 10 ? "0" + iMin : iMin + "",
+                   sec = iSec < 10 ? "0" + iSec : iSec + "";
             return min + ":" + sec;
         }
     }
