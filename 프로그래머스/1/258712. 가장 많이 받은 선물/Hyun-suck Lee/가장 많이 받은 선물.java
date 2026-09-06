@@ -1,3 +1,4 @@
+// 태성씨 코드 보고 초기화 로직 및 giftSocre 2차 로직 수정 
 import java.util.*;
 
 class Solution {
@@ -7,35 +8,18 @@ class Solution {
         // 사람 : 선물 지수
         Map<String, Integer> giftScore = new HashMap<>();
         
-        for (String userA : friends) {
-            Map<String, Integer> giftCount = new HashMap<>();
-            
-            for (String userB : friends) {
-                if (userA.equals(userB)) continue;
-                giftCount.put(userB, 0);
-            }
-            
-            giftForMe.put(userA, giftCount);
-            giftScore.put(userA, 0);
-        }
-        
         for (String gift : gifts) {
             String[] whoToWhom = gift.split(" ");
             String who  = whoToWhom[0],
                    whom = whoToWhom[1];
             
             giftScore.merge(who, 1, Integer::sum);
-            giftForMe.get(whom).merge(who, 1, Integer::sum);    // 준 개수 먼저 종합
-        }
-        
-        // giftScore 최종 계산 (받은 개수 빼야 함)
-        for (String user : friends) {
-            int getGiftCount = 0;
-            for (int count : giftForMe.get(user).values()) {
-                getGiftCount -= count;
-            }
+            giftScore.merge(whom, -1, Integer::sum);    
             
-            giftScore.merge(user, getGiftCount, Integer::sum);
+            if (!giftForMe.containsKey(whom)) {
+                giftForMe.put(whom, new HashMap<>());
+            }
+            giftForMe.get(whom).merge(who, 1, Integer::sum);
         }
         
         // 결과 종합
@@ -43,17 +27,21 @@ class Solution {
         for (String userA : friends) {
             int aWillGetGift = 0;
             
-            int aScore = giftScore.get(userA);
+            int aScore = giftScore.getOrDefault(userA, 0);
             
             for (String userB : friends) {
                 if (userA.equals(userB)) continue;
                 
-                int aForB = giftForMe.get(userB).get(userA),
-                    bForA = giftForMe.get(userA).get(userB);
+                int aForB = giftForMe
+                        .getOrDefault(userB, Collections.emptyMap())
+                        .getOrDefault(userA, 0),
+                    bForA = giftForMe
+                        .getOrDefault(userA, Collections.emptyMap())
+                        .getOrDefault(userB, 0);
                 
                 if (aForB < bForA) continue;            // A가 준 개수가 더 적음
                 if (aForB == bForA) {
-                    int bScore = giftScore.get(userB);  
+                    int bScore = giftScore.getOrDefault(userB, 0);  
                     if (aScore <= bScore) continue;     // A 선물 지수가 더 작음
                 }
 
