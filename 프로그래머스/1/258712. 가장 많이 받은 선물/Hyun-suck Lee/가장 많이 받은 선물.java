@@ -1,6 +1,7 @@
 // 태성씨 코드 보고 초기화 로직 및 giftSocre 2차 로직 수정 
 // 시간이랑 메모리 사용량 더 올라감 -> why? -> getOrDefault() 호출 시간이 더 걸리나봄 ㅇㅅㅇ..
 // 다시 원상복구하나 giftSocre 2차 로직은 수정 그대로 제거본
+// -> 이래도 시간이 더 김 뭐지 ㅇㅅㅇ? -> 완전 원본으로 돌림
 import java.util.*;
 
 class Solution {
@@ -18,7 +19,7 @@ class Solution {
                 giftCount.put(userB, 0);
             }
             
-            giftForMe.put(userA, giftCount); 
+            giftForMe.put(userA, giftCount);
             giftScore.put(userA, 0);
         }
         
@@ -28,8 +29,17 @@ class Solution {
                    whom = whoToWhom[1];
             
             giftScore.merge(who, 1, Integer::sum);
-            giftScore.merge(whom, -1, Integer::sum);
             giftForMe.get(whom).merge(who, 1, Integer::sum);    // 준 개수 먼저 종합
+        }
+        
+        // giftScore 최종 계산 (받은 개수 빼야 함)
+        for (String user : friends) {
+            int getGiftCount = 0;
+            for (int count : giftForMe.get(user).values()) {
+                getGiftCount -= count;
+            }
+            
+            giftScore.merge(user, getGiftCount, Integer::sum);
         }
         
         // 결과 종합
