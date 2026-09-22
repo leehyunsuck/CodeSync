@@ -1,9 +1,7 @@
-import java.util.*;
+// 이번 목표: 넘버 패드가 달라도, 움직임이 달라도 대응 가능하도록 
+// 수정: 태성씨 코드 보고 열이 3개니까 1 4 7, 3 6 9 나머지로 사용하도록
 
-// 이번 목표
-// 넘버 패드가 달라도
-// 움직임이 달라도 
-// 대응 가능하도록 
+import java.util.*;
 
 class Solution {
     private int[] thumb; // [좌, 우]
@@ -13,16 +11,11 @@ class Solution {
     
     // 판단용
     private boolean isForceLeft;
-    private Set<Integer> onlyL;
-    private Set<Integer> onlyR;
     
     public Solution() {
         this.pad = new NumberPad();
         this.thumb = new int[] {10, 11}; // *: 10, #: 11
         this.thumbLog = new StringBuilder();
-        
-        onlyL = new HashSet<>(Set.of(1, 4, 7));
-        onlyR = new HashSet<>(Set.of(3, 6, 9));
     }
     
     public String solution(int[] numbers, String hand) {
@@ -38,8 +31,8 @@ class Solution {
     // 실제 터치 로직
     private void touchNumber(int number) {
         int idx;
-        if      (this.onlyL.contains(number)) idx = 0;
-        else if (this.onlyR.contains(number)) idx = 1;
+        if      (number % 3 == 1)                idx = 0;
+        else if (number != 0 && number % 3 == 0) idx = 1;
         else {
             int lCnt = this.pad.findNumber(thumb[0], number),
                 rCnt = this.pad.findNumber(thumb[1], number);
@@ -63,6 +56,7 @@ class NumberPad {
     private static final int[][] DEFAULT_MOVE = new int[][] {
         {-1, 0}, {1, 0}, {0, -1}, {0, 1}    // 상 하 좌 우 순서임
     };
+    private static final int[] MIN_ROW_COL = new int[] {0, 0};
     
     private Map<Integer, List<Integer>> pad;
     
